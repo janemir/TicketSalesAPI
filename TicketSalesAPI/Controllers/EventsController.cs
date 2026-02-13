@@ -8,4 +8,10 @@ public class EventsController
         new Event { Id = 2, Name = "Экспозиции в залах планетария", Date = new DateTime(2026, 2, 28), Venue = "Планетарий", AvailableTickets = 80, Price = 150 },
         new Event { Id = 3, Name = "Мертвые души", Date = new DateTime(2026, 2, 26), Venue = "Драматический театр им. Луначарского", AvailableTickets = 45, Price = 1500 }
     };
+
+    [HttpGet]
+    public ActionResult<IEnumerable<Event>> GetEvents()
+    {
+        return Ok(_events);
+    }
 }
