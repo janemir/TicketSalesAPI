@@ -48,4 +48,15 @@ public class EventsController
 
         return NoContent();
     }
+
+    [HttpDelete("{id}")]
+    public IActionResult DeleteEvent(int id)
+    {
+        var ev = _events.FirstOrDefault(e => e.Id == id);
+        if (ev == null)
+            return NotFound();
+
+        _events.Remove(ev);
+        return NoContent();
+    }
 }
