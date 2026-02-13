@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "VicXB+IjboMrXO/ZzjDWH7U7G1Pb7asUhorDw/YDpg4=",
+  "Source": "TicketSalesAPI",
+  "BasePath": "_content/TicketSalesAPI",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}

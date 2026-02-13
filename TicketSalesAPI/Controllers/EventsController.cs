@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using TicketSalesAPI.Models;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace TicketSalesAPI.Controllers;
 
+[ApiController]
+[Route("api/[controller]")]
 public class EventsController : ControllerBase
 {
     private static List<Event> _events = new List<Event>
