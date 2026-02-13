@@ -14,4 +14,13 @@ public class EventsController
     {
         return Ok(_events);
     }
+
+    [HttpGet("{id}")]
+    public ActionResult<Event> GetEvent(int id)
+    {
+        var ev = _events.FirstOrDefault(e => e.Id == id);
+        if (ev == null)
+            return NotFound();
+        return Ok(ev);
+    }
 }
