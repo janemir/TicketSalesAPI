@@ -1,6 +1,11 @@
-namespace TicketSalesAPI.Models;
+using Microsoft.AspNetCore.Mvc;
+using TicketSalesAPI.Models;
+using System.Collections.Generic;
+using System.Linq;
 
-public class EventsController
+namespace TicketSalesAPI.Controllers;
+
+public class EventsController : ControllerBase
 {
     private static List<Event> _events = new List<Event>
     {
@@ -27,7 +32,7 @@ public class EventsController
     [HttpPost]
     public ActionResult<Event> CreateEvent(Event newEvent)
     {
-        newEvent.Id = _events.Max(e => e.Id) + 1;
+        newEvent.Id = _events.Any() ? _events.Max(e => e.Id) + 1 : 1;
         _events.Add(newEvent);
 
         return CreatedAtAction(nameof(GetEvent), new { id = newEvent.Id }, newEvent);
