@@ -32,4 +32,20 @@ public class EventsController
 
         return CreatedAtAction(nameof(GetEvent), new { id = newEvent.Id }, newEvent);
     }
+
+    [HttpPut("{id}")]
+    public IActionResult UpdateEvent(int id, Event updatedEvent)
+    {
+        var ev = _events.FirstOrDefault(e => e.Id == id);
+        if (ev == null)
+            return NotFound();
+
+        ev.Name = updatedEvent.Name;
+        ev.Date = updatedEvent.Date;
+        ev.Venue = updatedEvent.Venue;
+        ev.AvailableTickets = updatedEvent.AvailableTickets;
+        ev.Price = updatedEvent.Price;
+
+        return NoContent();
+    }
 }
