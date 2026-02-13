@@ -23,4 +23,13 @@ public class EventsController
             return NotFound();
         return Ok(ev);
     }
+
+    [HttpPost]
+    public ActionResult<Event> CreateEvent(Event newEvent)
+    {
+        newEvent.Id = _events.Max(e => e.Id) + 1;
+        _events.Add(newEvent);
+
+        return CreatedAtAction(nameof(GetEvent), new { id = newEvent.Id }, newEvent);
+    }
 }
