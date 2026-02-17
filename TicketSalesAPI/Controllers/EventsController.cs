@@ -51,7 +51,7 @@ public class EventsController : ControllerBase
         ev.AvailableTickets = updatedEvent.AvailableTickets;
         ev.Price = updatedEvent.Price;
 
-        return NoContent();
+        return Ok(ev);
     }
 
     [HttpDelete("{id}")]
@@ -62,6 +62,6 @@ public class EventsController : ControllerBase
             return NotFound();
 
         _events.Remove(ev);
-        return NoContent();
+        return Ok(_events);
     }
 }
