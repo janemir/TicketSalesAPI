@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace TicketSalesAPI.Models;
+namespace TicketSalesAPI.Models.Dto;
 
 public class CreateEventDto
 {

@@ -1,6 +1,13 @@
+using TicketSalesAPI.Models;
+using TicketSalesAPI.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.Configure<EventStoreDatabaseSettings>(
+    builder.Configuration.GetSection("EventStoreDatabase"));
+
+builder.Services.AddSingleton<EventsService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

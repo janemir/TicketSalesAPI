@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using TicketSalesAPI.Models;
+using TicketSalesAPI.Models.Dto;
+using TicketSalesAPI.Services;
 
 namespace TicketSalesAPI.Controllers;
 
@@ -7,51 +9,37 @@ namespace TicketSalesAPI.Controllers;
 [Route("api/[controller]")]
 public class EventsController : ControllerBase
 {
-    private static List<Event> _events = new List<Event>
+    private readonly EventsService _eventsService;
+
+    public EventsController(EventsService eventsService)
     {
-        new Event
-        {
-            Id = 1,
-            Name = "Концерт Винтаж",
-            Date = new DateTime(2026, 4, 16),
-            HallType = HallType.Large,
-            AvailableTickets = 150,
-            Price = 1850
-        },
-        new Event
-        {
-            Id = 2,
-            Name = "Экспозиции в залах планетария",
-            Date = new DateTime(2026, 2, 28),
-            HallType = HallType.Medium,
-            AvailableTickets = 48,
-            Price = 150
-        },
-        new Event
-        {
-            Id = 3,
-            Name = "Мертвые души",
-            Date = new DateTime(2026, 2, 26),
-            HallType = HallType.Small,
-            AvailableTickets = 24,
-            Price = 1500
-        }
-    };
+        _eventsService = eventsService;
+    }
 
     [HttpGet]
-    public ActionResult<IEnumerable<Event>> GetEvents() => Ok(_events);
+    public async Task<ActionResult<IEnumerable<Event>>> GetEvents()
+    {
+        var allEvents = await _eventsService.GetAsync();
+        if (allEvents.Count > 1000)
+        {
+            var randomEvents = await _eventsService.GetRandomAsync(1000);
+            return Ok(randomEvents);
+        }
+        return Ok(allEvents);
+    }
 
     [HttpGet("{id}")]
-    public ActionResult<Event> GetEvent(int id)
+    public async Task<ActionResult<Event>> GetEvent(string id)
     {
-        var ev = _events.FirstOrDefault(e => e.Id == id);
-        return ev == null ? NotFound() : Ok(ev);
+        var ev = await _eventsService.GetAsync(id);
+        if (ev == null)
+            return NotFound();
+        return Ok(ev);
     }
 
     [HttpPost]
-    public ActionResult<Event> CreateEvent(CreateEventDto dto)
+    public async Task<ActionResult<Event>> CreateEvent(CreateEventDto dto)
     {
-
         if (dto.AvailableTickets > new Event { HallType = dto.HallType }.TotalTickets)
         {
             return BadRequest($"Количество доступных билетов не может превышать вместимость зала ({new Event { HallType = dto.HallType }.TotalTickets})");
@@ -59,7 +47,6 @@ public class EventsController : ControllerBase
 
         var newEvent = new Event
         {
-            Id = _events.Any() ? _events.Max(e => e.Id) + 1 : 1,
             Name = dto.Name,
             Date = dto.Date,
             HallType = dto.HallType,
@@ -67,14 +54,14 @@ public class EventsController : ControllerBase
             Price = dto.Price
         };
 
-        _events.Add(newEvent);
+        await _eventsService.CreateAsync(newEvent);
         return CreatedAtAction(nameof(GetEvent), new { id = newEvent.Id }, newEvent);
     }
 
     [HttpPut("{id}")]
-    public IActionResult UpdateEvent(int id, Event updatedEvent)
+    public async Task<IActionResult> UpdateEvent(string id, Event updatedEvent)
     {
-        var ev = _events.FirstOrDefault(e => e.Id == id);
+        var ev = await _eventsService.GetAsync(id);
         if (ev == null) return NotFound();
 
         if (updatedEvent.AvailableTickets > new Event { HallType = updatedEvent.HallType }.TotalTickets)
@@ -88,16 +75,27 @@ public class EventsController : ControllerBase
         ev.AvailableTickets = updatedEvent.AvailableTickets;
         ev.Price = updatedEvent.Price;
 
+        await _eventsService.UpdateAsync(id, ev);
         return Ok(ev);
     }
 
     [HttpDelete("{id}")]
-    public IActionResult DeleteEvent(int id)
+    public async Task<IActionResult> DeleteEvent(string id)
     {
-        var ev = _events.FirstOrDefault(e => e.Id == id);
+        var ev = await _eventsService.GetAsync(id);
         if (ev == null) return NotFound();
 
-        _events.Remove(ev);
-        return Ok(_events);
+        await _eventsService.RemoveAsync(id);
+        return NoContent();
+    }
+
+    [HttpGet("filter")]
+    public async Task<ActionResult<IEnumerable<Event>>> GetFilteredEvents(
+        [FromQuery] string? name,
+        [FromQuery] DateTime? fromDate,
+        [FromQuery] HallType? hallType)
+    {
+        var filteredEvents = await _eventsService.GetFilteredAsync(name, fromDate, hallType);
+        return Ok(filteredEvents);
     }
 }

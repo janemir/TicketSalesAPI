@@ -31,3 +31,9 @@ C:\Users\User\RiderProjects\TicketSalesAPI\TicketSalesAPI\obj\Debug\net8.0\refin
 C:\Users\User\RiderProjects\TicketSalesAPI\TicketSalesAPI\obj\Debug\net8.0\TicketSalesAPI.pdb
 C:\Users\User\RiderProjects\TicketSalesAPI\TicketSalesAPI\obj\Debug\net8.0\TicketSalesAPI.genruntimeconfig.cache
 C:\Users\User\RiderProjects\TicketSalesAPI\TicketSalesAPI\obj\Debug\net8.0\ref\TicketSalesAPI.dll
+C:\Users\User\RiderProjects\TicketSalesAPI\TicketSalesAPI\bin\Debug\net8.0\DnsClient.dll
+C:\Users\User\RiderProjects\TicketSalesAPI\TicketSalesAPI\bin\Debug\net8.0\MongoDB.Bson.dll
+C:\Users\User\RiderProjects\TicketSalesAPI\TicketSalesAPI\bin\Debug\net8.0\MongoDB.Driver.dll
+C:\Users\User\RiderProjects\TicketSalesAPI\TicketSalesAPI\bin\Debug\net8.0\SharpCompress.dll
+C:\Users\User\RiderProjects\TicketSalesAPI\TicketSalesAPI\bin\Debug\net8.0\Snappier.dll
+C:\Users\User\RiderProjects\TicketSalesAPI\TicketSalesAPI\bin\Debug\net8.0\ZstdSharp.dll
