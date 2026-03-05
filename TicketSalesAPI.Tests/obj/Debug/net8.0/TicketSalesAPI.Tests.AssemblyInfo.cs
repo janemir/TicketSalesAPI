@@ -10,12 +10,12 @@
 using System;
 using System.Reflection;
 
-[assembly: System.Reflection.AssemblyCompanyAttribute("TicketSalesAPI")]
+[assembly: System.Reflection.AssemblyCompanyAttribute("TicketSalesAPI.Tests")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
 [assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a754e597386792ca599f5fc22df2e159278640db")]
-[assembly: System.Reflection.AssemblyProductAttribute("TicketSalesAPI")]
-[assembly: System.Reflection.AssemblyTitleAttribute("TicketSalesAPI")]
+[assembly: System.Reflection.AssemblyProductAttribute("TicketSalesAPI.Tests")]
+[assembly: System.Reflection.AssemblyTitleAttribute("TicketSalesAPI.Tests")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
 
 // Создано классом WriteCodeFragment MSBuild.

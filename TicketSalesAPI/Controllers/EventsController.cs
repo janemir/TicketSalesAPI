@@ -86,7 +86,7 @@ public class EventsController : ControllerBase
         if (ev == null) return NotFound();
 
         await _eventsService.RemoveAsync(id);
-        return NoContent();
+        return Ok(ev);
     }
 
     [HttpGet("filter")]
