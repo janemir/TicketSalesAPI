@@ -1,4 +1,5 @@
 using System.Net.Http.Json;
+using TicketSalesAPI.Models;
 using TicketSalesAPI.Models.Dto;
 
 namespace TicketSalesAPI.Tests;
@@ -10,7 +11,7 @@ public class ApiTests
     public ApiTests()
     {
         _client = new HttpClient();
-        _client.BaseAddress = new Uri("https://localhost:44378/"); // Замени порт на свой
+        _client.BaseAddress = new Uri("https://localhost:44378/");
     }
 
     [Fact]
