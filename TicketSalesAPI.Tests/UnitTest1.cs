@@ -23,9 +23,9 @@ public class ApiTests
             eventsToAdd.Add(new CreateEventDto
             {
                 Name = $"Test Event {i}",
-                Date = DateTime.Now.AddDays(i),
+                Date = DateTime.Now.AddDays(i + 1),
                 HallType = HallType.Medium,
-                AvailableTickets = 100,
+                AvailableTickets = 50,
                 Price = 500
             });
         }
@@ -48,9 +48,9 @@ public class ApiTests
                 eventsToAdd.Add(new CreateEventDto
                 {
                     Name = $"LoadTest Event {j * 1000 + i}",
-                    Date = DateTime.Now.AddDays(j * 1000 + i),
+                    Date = DateTime.Now.AddDays(j * 1000 + i + 1),
                     HallType = HallType.Small,
-                    AvailableTickets = 50,
+                    AvailableTickets = 25,
                     Price = 200
                 });
             }
