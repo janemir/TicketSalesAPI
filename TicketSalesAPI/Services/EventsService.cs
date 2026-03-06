@@ -18,8 +18,17 @@ public class EventsService
     public async Task<List<Event>> GetAsync() =>
         await _eventsCollection.Find(_ => true).ToListAsync();
 
-    public async Task<Event?> GetAsync(string id) =>
-        await _eventsCollection.Find(x => x.Id == id).FirstOrDefaultAsync();
+    public async Task<Event?> GetAsync(string id)
+    {
+        try
+        {
+            return await _eventsCollection.Find(x => x.Id == id).FirstOrDefaultAsync();
+        }
+        catch (FormatException)
+        {
+            return null;
+        }
+    }
 
     public async Task CreateAsync(Event newEvent) =>
         await _eventsCollection.InsertOneAsync(newEvent);
@@ -30,7 +39,6 @@ public class EventsService
     public async Task RemoveAsync(string id) =>
         await _eventsCollection.DeleteOneAsync(x => x.Id == id);
 
-    // Новые методы для лабораторной №2
     public async Task<List<Event>> GetRandomAsync(int sampleSize)
     {
         return await _eventsCollection.Aggregate()
