@@ -4,7 +4,7 @@ using TicketSalesAPI.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.Configure<EventStoreDatabaseSettings>(
+builder.Services.Configure<EventStoreDBSettings>(
     builder.Configuration.GetSection("EventStoreDatabase"));
 
 builder.Services.AddSingleton<EventsService>();

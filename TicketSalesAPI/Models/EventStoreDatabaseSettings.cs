@@ -1,6 +1,6 @@
 namespace TicketSalesAPI.Models;
 
-public class EventStoreDatabaseSettings
+public class EventStoreDBSettings
 {
     public string ConnectionString { get; set; } = null!;
     public string DatabaseName { get; set; } = null!;

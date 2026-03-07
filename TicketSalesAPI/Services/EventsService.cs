@@ -8,7 +8,7 @@ public class EventsService
 {
     private readonly IMongoCollection<Event> _eventsCollection;
 
-    public EventsService(IOptions<EventStoreDatabaseSettings> databaseSettings)
+    public EventsService(IOptions<EventStoreDBSettings> databaseSettings)
     {
         var mongoClient = new MongoClient(databaseSettings.Value.ConnectionString);
         var mongoDatabase = mongoClient.GetDatabase(databaseSettings.Value.DatabaseName);
