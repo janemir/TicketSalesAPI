@@ -59,21 +59,21 @@ public class EventsController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateEvent(string id, Event updatedEvent)
+    public async Task<IActionResult> UpdateEvent(string id, CreateEventDto dto)
     {
         var ev = await _eventsService.GetAsync(id);
         if (ev == null) return NotFound();
 
-        if (updatedEvent.AvailableTickets > new Event { HallType = updatedEvent.HallType }.TotalTickets)
+        if (dto.AvailableTickets > new Event { HallType = dto.HallType }.TotalTickets)
         {
-            return BadRequest($"Количество доступных билетов не может превышать вместимость зала ({new Event { HallType = updatedEvent.HallType }.TotalTickets})");
+            return BadRequest($"Количество доступных билетов не может превышать вместимость зала ({new Event { HallType = dto.HallType }.TotalTickets})");
         }
 
-        ev.Name = updatedEvent.Name;
-        ev.Date = updatedEvent.Date;
-        ev.HallType = updatedEvent.HallType;
-        ev.AvailableTickets = updatedEvent.AvailableTickets;
-        ev.Price = updatedEvent.Price;
+        ev.Name = dto.Name;
+        ev.Date = dto.Date;
+        ev.HallType = dto.HallType;
+        ev.AvailableTickets = dto.AvailableTickets;
+        ev.Price = dto.Price;
 
         await _eventsService.UpdateAsync(id, ev);
         return Ok(ev);
