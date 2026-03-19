@@ -1,8 +1,8 @@
 {
   "Version": 1,
-  "Hash": "VicXB+IjboMrXO/ZzjDWH7U7G1Pb7asUhorDw/YDpg4=",
-  "Source": "TicketSalesAPI",
-  "BasePath": "_content/TicketSalesAPI",
+  "Hash": "YTqzm+2HN5cgkjb1t0D3Tn+bqc7mab56U8UItum9W9c=",
+  "Source": "TicketSalesAPI_NoDB",
+  "BasePath": "_content/TicketSalesAPI_NoDB",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],
