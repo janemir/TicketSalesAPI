@@ -2,14 +2,26 @@ using Microsoft.AspNetCore.Mvc;
 using TicketSalesAPI.Models;
 using TicketSalesAPI.Models.Dto;
 using TicketSalesAPI.Services;
+using Prometheus;
 
 namespace TicketSalesAPI.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+
 public class EventsController : ControllerBase
 {
     private readonly EventsService _eventsService;
+
+    private static readonly Counter EventsCreatedCounter = Metrics.CreateCounter(
+        "events_created_total",
+        "Total number of events created",
+        new CounterConfiguration { LabelNames = new[] { "service" } });
+
+    private static readonly Counter EventsValidationErrorsCounter = Metrics.CreateCounter(
+        "events_validation_errors_total",
+        "Total number of validation errors (tickets > capacity)",
+        new CounterConfiguration { LabelNames = new[] { "service" } });
 
     public EventsController(EventsService eventsService)
     {
@@ -42,6 +54,7 @@ public class EventsController : ControllerBase
     {
         if (dto.AvailableTickets > new Event { HallType = dto.HallType }.TotalTickets)
         {
+            EventsValidationErrorsCounter.WithLabels("service-db").Inc();
             return BadRequest($"Количество доступных билетов не может превышать вместимость зала ({new Event { HallType = dto.HallType }.TotalTickets})");
         }
 
@@ -55,6 +68,7 @@ public class EventsController : ControllerBase
         };
 
         await _eventsService.CreateAsync(newEvent);
+        EventsCreatedCounter.WithLabels("service-db").Inc();
         return CreatedAtAction(nameof(GetEvent), new { id = newEvent.Id }, newEvent);
     }
 
@@ -66,6 +80,7 @@ public class EventsController : ControllerBase
 
         if (dto.AvailableTickets > new Event { HallType = dto.HallType }.TotalTickets)
         {
+            EventsValidationErrorsCounter.WithLabels("service-db").Inc();
             return BadRequest($"Количество доступных билетов не может превышать вместимость зала ({new Event { HallType = dto.HallType }.TotalTickets})");
         }
 
