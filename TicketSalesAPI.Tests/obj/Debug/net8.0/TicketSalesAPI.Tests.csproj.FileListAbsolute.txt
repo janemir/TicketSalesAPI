@@ -118,3 +118,5 @@ C:\Users\User\RiderProjects\TicketSalesAPI\TicketSalesAPI.Tests\obj\Debug\net8.0
 C:\Users\User\RiderProjects\TicketSalesAPI\TicketSalesAPI.Tests\obj\Debug\net8.0\TicketSalesAPI.Tests.pdb
 C:\Users\User\RiderProjects\TicketSalesAPI\TicketSalesAPI.Tests\obj\Debug\net8.0\TicketSalesAPI.Tests.genruntimeconfig.cache
 C:\Users\User\RiderProjects\TicketSalesAPI\TicketSalesAPI.Tests\obj\Debug\net8.0\ref\TicketSalesAPI.Tests.dll
+C:\Users\User\RiderProjects\TicketSalesAPI\TicketSalesAPI.Tests\bin\Debug\net8.0\Prometheus.NetStandard.dll
+C:\Users\User\RiderProjects\TicketSalesAPI\TicketSalesAPI.Tests\bin\Debug\net8.0\Prometheus.AspNetCore.dll
