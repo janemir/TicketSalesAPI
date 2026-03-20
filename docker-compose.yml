@@ -20,6 +20,7 @@ services:
       - EventStoreDatabase__DatabaseName=TicketSalesDB
       - EventStoreDatabase__EventsCollectionName=Events
       - ASPNETCORE_ENVIRONMENT=Development
+      - GF_SECURITY_ADMIN_PASSWORD=admin
     depends_on:
       - mongodb
     restart: unless-stopped
