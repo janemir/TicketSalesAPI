@@ -40,3 +40,5 @@ C:\Users\User\RiderProjects\TicketSalesAPI\TicketSalesAPI\bin\Debug\net8.0\ZstdS
 C:\Users\User\RiderProjects\TicketSalesAPI\TicketSalesAPI\bin\Debug\net8.0\System.Net.Http.Formatting.dll
 C:\Users\User\RiderProjects\TicketSalesAPI\TicketSalesAPI\bin\Debug\net8.0\Newtonsoft.Json.dll
 C:\Users\User\RiderProjects\TicketSalesAPI\TicketSalesAPI\bin\Debug\net8.0\Newtonsoft.Json.Bson.dll
+C:\Users\User\RiderProjects\TicketSalesAPI\TicketSalesAPI\bin\Debug\net8.0\Prometheus.NetStandard.dll
+C:\Users\User\RiderProjects\TicketSalesAPI\TicketSalesAPI\bin\Debug\net8.0\Prometheus.AspNetCore.dll

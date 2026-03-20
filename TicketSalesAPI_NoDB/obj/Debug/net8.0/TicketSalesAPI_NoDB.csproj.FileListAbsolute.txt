@@ -34,3 +34,5 @@ C:\Users\User\RiderProjects\TicketSalesAPI\TicketSalesAPI_NoDB\obj\Debug\net8.0\
 C:\Users\User\RiderProjects\TicketSalesAPI\TicketSalesAPI_NoDB\obj\Debug\net8.0\TicketSalesAPI_NoDB.pdb
 C:\Users\User\RiderProjects\TicketSalesAPI\TicketSalesAPI_NoDB\obj\Debug\net8.0\TicketSalesAPI_NoDB.genruntimeconfig.cache
 C:\Users\User\RiderProjects\TicketSalesAPI\TicketSalesAPI_NoDB\obj\Debug\net8.0\ref\TicketSalesAPI_NoDB.dll
+C:\Users\User\RiderProjects\TicketSalesAPI\TicketSalesAPI_NoDB\bin\Debug\net8.0\Prometheus.NetStandard.dll
+C:\Users\User\RiderProjects\TicketSalesAPI\TicketSalesAPI_NoDB\bin\Debug\net8.0\Prometheus.AspNetCore.dll
