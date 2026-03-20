@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using TicketSalesAPI.Models;
 using TicketSalesAPI.Models.Dto;
+using Prometheus;
 
 namespace TicketSalesAPI.Controllers;
 
@@ -14,6 +15,16 @@ public class EventsController : ControllerBase
         new Event { Id = "2", Name = "Экспозиции в залах планетария", Date = new DateTime(2026, 2, 28), HallType = HallType.Medium, AvailableTickets = 48, Price = 150 },
         new Event { Id = "3", Name = "Мертвые души", Date = new DateTime(2026, 2, 26), HallType = HallType.Small, AvailableTickets = 24, Price = 1500 }
     };
+
+    private static readonly Counter EventsCreatedCounter = Metrics.CreateCounter(
+        "events_created_total",
+        "Total number of events created",
+        new CounterConfiguration { LabelNames = new[] { "service" } });
+
+    private static readonly Counter EventsValidationErrorsCounter = Metrics.CreateCounter(
+        "events_validation_errors_total",
+        "Total number of validation errors (tickets > capacity)",
+        new CounterConfiguration { LabelNames = new[] { "service" } });
 
     [HttpGet]
     public ActionResult<IEnumerable<Event>> GetEvents() => Ok(_events);
