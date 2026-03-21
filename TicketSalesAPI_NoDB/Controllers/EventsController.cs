@@ -40,7 +40,10 @@ public class EventsController : ControllerBase
     public ActionResult<Event> CreateEvent(CreateEventDto dto)
     {
         if (dto.AvailableTickets > new Event { HallType = dto.HallType }.TotalTickets)
+        {
+            EventsValidationErrorsCounter.WithLabels("service-nodb").Inc();
             return BadRequest($"Количество билетов превышает вместимость зала ({new Event { HallType = dto.HallType }.TotalTickets})");
+        }
 
         var newEvent = new Event
         {
@@ -52,6 +55,7 @@ public class EventsController : ControllerBase
             Price = dto.Price
         };
         _events.Add(newEvent);
+        EventsCreatedCounter.WithLabels("service-nodb").Inc();
         return CreatedAtAction(nameof(GetEvent), new { id = newEvent.Id }, newEvent);
     }
 
@@ -62,7 +66,10 @@ public class EventsController : ControllerBase
         if (ev == null) return NotFound();
 
         if (dto.AvailableTickets > new Event { HallType = dto.HallType }.TotalTickets)
+        {
+            EventsValidationErrorsCounter.WithLabels("service-nodb").Inc();
             return BadRequest($"Количество билетов превышает вместимость зала ({new Event { HallType = dto.HallType }.TotalTickets})");
+        }
 
         ev.Name = dto.Name;
         ev.Date = dto.Date;
