@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Distributed;
+using System.Text.Json;
 using TicketSalesAPI.Models;
 using TicketSalesAPI.Models.Dto;
 using TicketSalesAPI.Services;
@@ -8,10 +10,11 @@ namespace TicketSalesAPI.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-
 public class EventsController : ControllerBase
 {
     private readonly EventsService _eventsService;
+
+    private readonly IDistributedCache _cache;
 
     private static readonly Counter EventsCreatedCounter = Metrics.CreateCounter(
         "events_created_total",
@@ -23,15 +26,51 @@ public class EventsController : ControllerBase
         "Total number of validation errors (tickets > capacity)",
         new CounterConfiguration { LabelNames = new[] { "service" } });
 
-    public EventsController(EventsService eventsService)
+    private static readonly Counter CacheHits = Metrics.CreateCounter(
+        "cache_hits_total",
+        "Total number of cache hits",
+        new CounterConfiguration { LabelNames = new[] { "service" } });
+
+    private static readonly Counter CacheMisses = Metrics.CreateCounter(
+        "cache_misses_total",
+        "Total number of cache misses",
+        new CounterConfiguration { LabelNames = new[] { "service" } });
+
+    public EventsController(EventsService eventsService, IDistributedCache cache)
     {
         _eventsService = eventsService;
+        _cache = cache;
+    }
+
+    private async Task InvalidateCache()
+    {
+        await _cache.RemoveAsync("all_events");
     }
 
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Event>>> GetEvents()
     {
+
+        string cacheKey = "all_events";
+        var cachedData = await _cache.GetStringAsync(cacheKey);
+        if (!string.IsNullOrEmpty(cachedData))
+        {
+
+            CacheHits.WithLabels("service-db").Inc();
+            var events = JsonSerializer.Deserialize<List<Event>>(cachedData);
+            return Ok(events);
+        }
+
+        CacheMisses.WithLabels("service-db").Inc();
+
         var allEvents = await _eventsService.GetAsync();
+
+        var serialized = JsonSerializer.Serialize(allEvents);
+        await _cache.SetStringAsync(cacheKey, serialized, new DistributedCacheEntryOptions
+        {
+            AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5)
+        });
+
         if (allEvents.Count > 1000)
         {
             var randomEvents = await _eventsService.GetRandomAsync(1000);
@@ -43,6 +82,7 @@ public class EventsController : ControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult<Event>> GetEvent(string id)
     {
+
         var ev = await _eventsService.GetAsync(id);
         if (ev == null)
             return NotFound();
@@ -69,6 +109,9 @@ public class EventsController : ControllerBase
 
         await _eventsService.CreateAsync(newEvent);
         EventsCreatedCounter.WithLabels("service-db").Inc();
+
+        await InvalidateCache();
+
         return CreatedAtAction(nameof(GetEvent), new { id = newEvent.Id }, newEvent);
     }
 
@@ -91,6 +134,9 @@ public class EventsController : ControllerBase
         ev.Price = dto.Price;
 
         await _eventsService.UpdateAsync(id, ev);
+
+        await InvalidateCache();
+
         return Ok(ev);
     }
 
@@ -101,6 +147,9 @@ public class EventsController : ControllerBase
         if (ev == null) return NotFound();
 
         await _eventsService.RemoveAsync(id);
+
+        await InvalidateCache();
+
         return Ok(ev);
     }
 
@@ -110,7 +159,25 @@ public class EventsController : ControllerBase
         [FromQuery] DateTime? fromDate,
         [FromQuery] HallType? hallType)
     {
+        string cacheKey = $"filter_{name}_{fromDate?.ToString("yyyyMMdd")}_{hallType}";
+        var cachedData = await _cache.GetStringAsync(cacheKey);
+        if (!string.IsNullOrEmpty(cachedData))
+        {
+            CacheHits.WithLabels("service-db").Inc();
+            var events = JsonSerializer.Deserialize<List<Event>>(cachedData);
+            return Ok(events);
+        }
+
+        CacheMisses.WithLabels("service-db").Inc();
+
         var filteredEvents = await _eventsService.GetFilteredAsync(name, fromDate, hallType);
+
+        var serialized = JsonSerializer.Serialize(filteredEvents);
+        await _cache.SetStringAsync(cacheKey, serialized, new DistributedCacheEntryOptions
+        {
+            AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5)
+        });
+
         return Ok(filteredEvents);
     }
 }
