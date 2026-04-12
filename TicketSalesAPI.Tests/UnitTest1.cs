@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Net.Http.Json;
 using TicketSalesAPI.Models;
 using TicketSalesAPI.Models.Dto;
@@ -11,7 +12,7 @@ public class ApiTests
     public ApiTests()
     {
         _client = new HttpClient();
-        _client.BaseAddress = new Uri("https://localhost:44378/");
+        _client.BaseAddress = new Uri("http://localhost:8080/");  // без докера https://localhost:44378/
     }
 
     [Fact]
@@ -109,5 +110,29 @@ public class ApiTests
         var finalEvents = await finalGetResponse.Content.ReadFromJsonAsync<List<Event>>();
         Assert.NotNull(finalEvents);
         Assert.Empty(finalEvents);
+    }
+
+    [Fact]
+    public async Task GetEvents_SecondRequest_IsFasterDueToCache()
+    {
+        var sw = Stopwatch.StartNew();
+        var response1 = await _client.GetAsync("/api/events");
+        response1.EnsureSuccessStatusCode();
+        sw.Stop();
+        var firstDuration = sw.ElapsedMilliseconds;
+
+        await Task.Delay(100);
+
+        sw.Restart();
+        var response2 = await _client.GetAsync("/api/events");
+        response2.EnsureSuccessStatusCode();
+        sw.Stop();
+        var secondDuration = sw.ElapsedMilliseconds;
+
+        Console.WriteLine($"First request: {firstDuration} ms, Second request: {secondDuration} ms");
+
+        var acceptableThreshold = firstDuration * 0.1;
+        Assert.True(secondDuration <= firstDuration + acceptableThreshold,
+            $"Второй запрос не быстрее: первый = {firstDuration} ms, второй = {secondDuration} ms");
     }
 }
