@@ -1,6 +1,7 @@
 using Prometheus;
 using TicketSalesAPI.Models;
 using TicketSalesAPI.Services;
+using Microsoft.Extensions.Caching.StackExchangeRedis;
 
 var builder = WebApplication.CreateBuilder(args);
 

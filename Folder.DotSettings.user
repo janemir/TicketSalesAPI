@@ -1,6 +1,6 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=a315133e_002D5026_002D41c2_002Db40b_002D2aae5003e348/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="Add_100_Events_ShouldSucceed" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=41b24d25_002D5e80_002D41e4_002Da15e_002Df4c5ab892a67/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="GetEvents_SecondRequest_IsFasterDueToCache" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;TestAncestor&gt;&#xD;
-    &lt;TestId&gt;xUnit::19CFCA6B-B2B4-1FE2-4045-135204D861FD::net8.0::TicketSalesAPI.Tests.ApiTests&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::19CFCA6B-B2B4-1FE2-4045-135204D861FD::net8.0::TicketSalesAPI.Tests.ApiTests.GetEvents_SecondRequest_IsFasterDueToCache&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>
