@@ -35,6 +35,14 @@ public class EventsController : ControllerBase
         "Total number of cache misses",
         new CounterConfiguration { LabelNames = new[] { "service" } });
 
+    private static readonly Histogram CacheOperationDuration = Metrics.CreateHistogram(
+        "cache_operation_duration_seconds",
+        "Duration of Redis cache operations (read/write/delete)",
+        new HistogramConfiguration
+        {
+            LabelNames = new[] { "service", "operation" }
+        });
+
     public EventsController(EventsService eventsService, IDistributedCache cache)
     {
         _eventsService = eventsService;
@@ -71,9 +79,19 @@ public class EventsController : ControllerBase
 
     private async Task InvalidateCache(string? eventId = null)
     {
-        await _cache.RemoveAsync("all_events");
+        using (CacheOperationDuration.WithLabels("service-db", "delete").NewTimer())
+        {
+            await _cache.RemoveAsync("all_events");
+        }
+
         if (!string.IsNullOrEmpty(eventId))
-            await _cache.RemoveAsync($"event_{eventId}");
+        {
+            using (CacheOperationDuration.WithLabels("service-db", "delete").NewTimer())
+            {
+                await _cache.RemoveAsync($"event_{eventId}");
+            }
+        }
+
         await IncrementCacheVersionAsync();
     }
 
@@ -81,7 +99,13 @@ public class EventsController : ControllerBase
     public async Task<ActionResult<IEnumerable<Event>>> GetEvents()
     {
         string cacheKey = "all_events";
-        var cachedData = await _cache.GetStringAsync(cacheKey);
+        string? cachedData = null;
+
+        using (CacheOperationDuration.WithLabels("service-db", "read").NewTimer())
+        {
+            cachedData = await _cache.GetStringAsync(cacheKey);
+        }
+
         if (!string.IsNullOrEmpty(cachedData))
         {
             CacheHits.WithLabels("service-db").Inc();
@@ -93,10 +117,14 @@ public class EventsController : ControllerBase
         var allEvents = await _eventsService.GetAsync();
 
         var serialized = JsonSerializer.Serialize(allEvents);
-        await _cache.SetStringAsync(cacheKey, serialized, new DistributedCacheEntryOptions
+
+        using (CacheOperationDuration.WithLabels("service-db", "write").NewTimer())
         {
-            AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5)
-        });
+            await _cache.SetStringAsync(cacheKey, serialized, new DistributedCacheEntryOptions
+            {
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5)
+            });
+        }
 
         if (allEvents.Count > 1000)
         {
@@ -110,7 +138,13 @@ public class EventsController : ControllerBase
     public async Task<ActionResult<Event>> GetEvent(string id)
     {
         string cacheKey = $"event_{id}";
-        var cachedData = await _cache.GetStringAsync(cacheKey);
+        string? cachedData = null;
+
+        using (CacheOperationDuration.WithLabels("service-db", "read").NewTimer())
+        {
+            cachedData = await _cache.GetStringAsync(cacheKey);
+        }
+
         if (!string.IsNullOrEmpty(cachedData))
         {
             CacheHits.WithLabels("service-db").Inc();
@@ -124,10 +158,14 @@ public class EventsController : ControllerBase
             return NotFound();
 
         var serialized = JsonSerializer.Serialize(evFromDb);
-        await _cache.SetStringAsync(cacheKey, serialized, new DistributedCacheEntryOptions
+
+        using (CacheOperationDuration.WithLabels("service-db", "write").NewTimer())
         {
-            AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5)
-        });
+            await _cache.SetStringAsync(cacheKey, serialized, new DistributedCacheEntryOptions
+            {
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5)
+            });
+        }
 
         return Ok(evFromDb);
     }
@@ -202,7 +240,13 @@ public class EventsController : ControllerBase
     {
         string version = await GetCurrentCacheVersionAsync();
         string cacheKey = $"filter_v{version}_{name}_{fromDate?.ToString("yyyyMMdd")}_{hallType}";
-        var cachedData = await _cache.GetStringAsync(cacheKey);
+        string? cachedData = null;
+
+        using (CacheOperationDuration.WithLabels("service-db", "read").NewTimer())
+        {
+            cachedData = await _cache.GetStringAsync(cacheKey);
+        }
+
         if (!string.IsNullOrEmpty(cachedData))
         {
             CacheHits.WithLabels("service-db").Inc();
@@ -212,12 +256,15 @@ public class EventsController : ControllerBase
 
         CacheMisses.WithLabels("service-db").Inc();
         var filteredEvents = await _eventsService.GetFilteredAsync(name, fromDate, hallType);
-
         var serialized = JsonSerializer.Serialize(filteredEvents);
-        await _cache.SetStringAsync(cacheKey, serialized, new DistributedCacheEntryOptions
+
+        using (CacheOperationDuration.WithLabels("service-db", "write").NewTimer())
         {
-            AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5)
-        });
+            await _cache.SetStringAsync(cacheKey, serialized, new DistributedCacheEntryOptions
+            {
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5)
+            });
+        }
 
         return Ok(filteredEvents);
     }
