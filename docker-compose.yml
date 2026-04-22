@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   mongodb:
     image: mongo:6.0
@@ -60,6 +58,38 @@ services:
     container_name: redis
     ports:
       - "6379:6379"
+    restart: unless-stopped
+
+  zookeeper:
+    image: wurstmeister/zookeeper:latest
+    container_name: zookeeper
+    ports:
+      - "2181:2181"
+    restart: unless-stopped
+
+  kafka:
+    image: wurstmeister/kafka:latest
+    container_name: kafka
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: localhost
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_CREATE_TOPICS: "object-created-topic:1:1,confirmation-topic:1:1"
+    ports:
+      - "9092:9092"
+    restart: unless-stopped
+
+  kafdrop:
+    image: obsidiandynamics/kafdrop:latest
+    container_name: kafdrop
+    depends_on:
+      - kafka
+    environment:
+      KAFKA_BROKERCONNECT: 'kafka:9092'
+      JVM_OPTS: "-Xms32M -Xmx64M"
+    ports:
+      - "9000:9000"
     restart: unless-stopped
 
 volumes:

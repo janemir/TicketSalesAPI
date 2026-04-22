@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("TicketSalesAPI_NoDB")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7a0b6b65e8306a1de10aab284e8a6dc98b49f663")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5ee4175dc32053febef9e5e509fab488afff7afa")]
 [assembly: System.Reflection.AssemblyProductAttribute("TicketSalesAPI_NoDB")]
 [assembly: System.Reflection.AssemblyTitleAttribute("TicketSalesAPI_NoDB")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
