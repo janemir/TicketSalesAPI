@@ -24,6 +24,12 @@ public class Event
     [BsonElement("Price")]
     public decimal Price { get; set; }
 
+    [BsonElement("UserId")]
+    public string? UserId { get; set; }
+
+    [BsonElement("ConfirmationStatus")]
+    public string? ConfirmationStatus { get; set; }
+
     public int TotalTickets => HallType switch
     {
         HallType.Small => 30,

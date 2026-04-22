@@ -185,7 +185,9 @@ public class EventsController : ControllerBase
             Date = dto.Date,
             HallType = dto.HallType,
             AvailableTickets = dto.AvailableTickets,
-            Price = dto.Price
+            Price = dto.Price,
+            UserId = dto.UserId,
+            ConfirmationStatus = "Pending"
         };
 
         await _eventsService.CreateAsync(newEvent);

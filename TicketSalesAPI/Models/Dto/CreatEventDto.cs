@@ -20,4 +20,7 @@ public class CreateEventDto
 
     [Range(0.01, double.MaxValue, ErrorMessage = "Цена должна быть больше 0")]
     public decimal Price { get; set; }
+
+    [Required(ErrorMessage = "Идентификатор пользователя обязателен")]
+    public string UserId { get; set; } = string.Empty;
 }
