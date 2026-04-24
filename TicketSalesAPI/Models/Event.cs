@@ -30,6 +30,9 @@ public class Event
     [BsonElement("ConfirmationStatus")]
     public string? ConfirmationStatus { get; set; }
 
+    [BsonElement("ConfirmationTime")]
+    public DateTime? ConfirmationTime { get; set; }
+
     public int TotalTickets => HallType switch
     {
         HallType.Small => 30,

@@ -12,8 +12,11 @@ namespace TicketSalesAPI.Controllers;
 [Route("api/[controller]")]
 public class EventsController : ControllerBase
 {
+
     private readonly EventsService _eventsService;
     private readonly IDistributedCache _cache;
+    private readonly KafkaProducerService _kafkaProducer;
+    private readonly ILogger<EventsController> _logger;
 
     private static readonly Counter EventsCreatedCounter = Metrics.CreateCounter(
         "events_created_total",
@@ -43,10 +46,16 @@ public class EventsController : ControllerBase
             LabelNames = new[] { "service", "operation" }
         });
 
-    public EventsController(EventsService eventsService, IDistributedCache cache)
+    public EventsController(
+        EventsService eventsService,
+        IDistributedCache cache,
+        KafkaProducerService kafkaProducer,
+        ILogger<EventsController> logger)
     {
         _eventsService = eventsService;
         _cache = cache;
+        _kafkaProducer = kafkaProducer;
+        _logger = logger;
     }
 
     private async Task<string> GetCurrentCacheVersionAsync()
@@ -79,20 +88,27 @@ public class EventsController : ControllerBase
 
     private async Task InvalidateCache(string? eventId = null)
     {
-        using (CacheOperationDuration.WithLabels("service-db", "delete").NewTimer())
-        {
-            await _cache.RemoveAsync("all_events");
-        }
-
-        if (!string.IsNullOrEmpty(eventId))
+        try
         {
             using (CacheOperationDuration.WithLabels("service-db", "delete").NewTimer())
             {
-                await _cache.RemoveAsync($"event_{eventId}");
+                await _cache.RemoveAsync("all_events");
             }
-        }
 
-        await IncrementCacheVersionAsync();
+            if (!string.IsNullOrEmpty(eventId))
+            {
+                using (CacheOperationDuration.WithLabels("service-db", "delete").NewTimer())
+                {
+                    await _cache.RemoveAsync($"event_{eventId}");
+                }
+            }
+
+            await IncrementCacheVersionAsync();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Redis недоступен, инвалидировать кэш не удалось");
+        }
     }
 
     [HttpGet]
@@ -101,9 +117,16 @@ public class EventsController : ControllerBase
         string cacheKey = "all_events";
         string? cachedData = null;
 
-        using (CacheOperationDuration.WithLabels("service-db", "read").NewTimer())
+        try
         {
-            cachedData = await _cache.GetStringAsync(cacheKey);
+            using (CacheOperationDuration.WithLabels("service-db", "read").NewTimer())
+            {
+                cachedData = await _cache.GetStringAsync(cacheKey);
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Redis недоступен, чтение из кэша пропущено");
         }
 
         if (!string.IsNullOrEmpty(cachedData))
@@ -118,12 +141,19 @@ public class EventsController : ControllerBase
 
         var serialized = JsonSerializer.Serialize(allEvents);
 
-        using (CacheOperationDuration.WithLabels("service-db", "write").NewTimer())
+        try
         {
-            await _cache.SetStringAsync(cacheKey, serialized, new DistributedCacheEntryOptions
+            using (CacheOperationDuration.WithLabels("service-db", "write").NewTimer())
             {
-                AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5)
-            });
+                await _cache.SetStringAsync(cacheKey, serialized, new DistributedCacheEntryOptions
+                {
+                    AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5)
+                });
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Redis недоступен, запись в кэш пропущена");
         }
 
         if (allEvents.Count > 1000)
@@ -140,9 +170,16 @@ public class EventsController : ControllerBase
         string cacheKey = $"event_{id}";
         string? cachedData = null;
 
-        using (CacheOperationDuration.WithLabels("service-db", "read").NewTimer())
+        try
         {
-            cachedData = await _cache.GetStringAsync(cacheKey);
+            using (CacheOperationDuration.WithLabels("service-db", "read").NewTimer())
+            {
+                cachedData = await _cache.GetStringAsync(cacheKey);
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Redis недоступен, чтение из кэша пропущено");
         }
 
         if (!string.IsNullOrEmpty(cachedData))
@@ -159,12 +196,19 @@ public class EventsController : ControllerBase
 
         var serialized = JsonSerializer.Serialize(evFromDb);
 
-        using (CacheOperationDuration.WithLabels("service-db", "write").NewTimer())
+        try
         {
-            await _cache.SetStringAsync(cacheKey, serialized, new DistributedCacheEntryOptions
+            using (CacheOperationDuration.WithLabels("service-db", "write").NewTimer())
             {
-                AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5)
-            });
+                await _cache.SetStringAsync(cacheKey, serialized, new DistributedCacheEntryOptions
+                {
+                    AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5)
+                });
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Redis недоступен, запись в кэш пропущена");
         }
 
         return Ok(evFromDb);
@@ -192,6 +236,12 @@ public class EventsController : ControllerBase
 
         await _eventsService.CreateAsync(newEvent);
         EventsCreatedCounter.WithLabels("service-db").Inc();
+
+        await _kafkaProducer.ProduceAsync("object-created-topic", new
+        {
+            ObjectId = newEvent.Id,
+            UserId = dto.UserId
+        });
 
         await InvalidateCache();
 
@@ -244,9 +294,16 @@ public class EventsController : ControllerBase
         string cacheKey = $"filter_v{version}_{name}_{fromDate?.ToString("yyyyMMdd")}_{hallType}";
         string? cachedData = null;
 
-        using (CacheOperationDuration.WithLabels("service-db", "read").NewTimer())
+        try
         {
-            cachedData = await _cache.GetStringAsync(cacheKey);
+            using (CacheOperationDuration.WithLabels("service-db", "read").NewTimer())
+            {
+                cachedData = await _cache.GetStringAsync(cacheKey);
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Redis недоступен, чтение из кэша пропущено");
         }
 
         if (!string.IsNullOrEmpty(cachedData))
@@ -260,12 +317,19 @@ public class EventsController : ControllerBase
         var filteredEvents = await _eventsService.GetFilteredAsync(name, fromDate, hallType);
         var serialized = JsonSerializer.Serialize(filteredEvents);
 
-        using (CacheOperationDuration.WithLabels("service-db", "write").NewTimer())
+        try
         {
-            await _cache.SetStringAsync(cacheKey, serialized, new DistributedCacheEntryOptions
+            using (CacheOperationDuration.WithLabels("service-db", "write").NewTimer())
             {
-                AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5)
-            });
+                await _cache.SetStringAsync(cacheKey, serialized, new DistributedCacheEntryOptions
+                {
+                    AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5)
+                });
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Redis недоступен, запись в кэш пропущена");
         }
 
         return Ok(filteredEvents);

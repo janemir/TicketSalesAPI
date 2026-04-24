@@ -16,16 +16,22 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.WebHost.ConfigureKestrel(options =>
+if (!builder.Environment.IsDevelopment())
 {
-    options.ListenAnyIP(8080);
-});
+    builder.WebHost.ConfigureKestrel(options =>
+    {
+        options.ListenAnyIP(8080);
+    });
+}
 
 builder.Services.AddStackExchangeRedisCache(options =>
 {
-    options.Configuration = "redis:6379";
+    options.Configuration = builder.Configuration.GetValue<string>("Redis:Configuration") ?? "localhost:6379";
     options.InstanceName = "TicketCache";
 });
+
+builder.Services.AddSingleton<KafkaProducerService>();
+builder.Services.AddHostedService<ConfirmationConsumerService>();
 
 var app = builder.Build();
 
