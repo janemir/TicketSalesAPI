@@ -6,11 +6,17 @@ C:\Users\User\RiderProjects\TicketSalesAPI\UserService\bin\Debug\net8.0\UserServ
 C:\Users\User\RiderProjects\TicketSalesAPI\UserService\bin\Debug\net8.0\UserService.dll
 C:\Users\User\RiderProjects\TicketSalesAPI\UserService\bin\Debug\net8.0\UserService.pdb
 C:\Users\User\RiderProjects\TicketSalesAPI\UserService\bin\Debug\net8.0\Confluent.Kafka.dll
+C:\Users\User\RiderProjects\TicketSalesAPI\UserService\bin\Debug\net8.0\DnsClient.dll
 C:\Users\User\RiderProjects\TicketSalesAPI\UserService\bin\Debug\net8.0\Microsoft.AspNetCore.OpenApi.dll
 C:\Users\User\RiderProjects\TicketSalesAPI\UserService\bin\Debug\net8.0\Microsoft.OpenApi.dll
+C:\Users\User\RiderProjects\TicketSalesAPI\UserService\bin\Debug\net8.0\MongoDB.Bson.dll
+C:\Users\User\RiderProjects\TicketSalesAPI\UserService\bin\Debug\net8.0\MongoDB.Driver.dll
+C:\Users\User\RiderProjects\TicketSalesAPI\UserService\bin\Debug\net8.0\SharpCompress.dll
+C:\Users\User\RiderProjects\TicketSalesAPI\UserService\bin\Debug\net8.0\Snappier.dll
 C:\Users\User\RiderProjects\TicketSalesAPI\UserService\bin\Debug\net8.0\Swashbuckle.AspNetCore.Swagger.dll
 C:\Users\User\RiderProjects\TicketSalesAPI\UserService\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerGen.dll
 C:\Users\User\RiderProjects\TicketSalesAPI\UserService\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerUI.dll
+C:\Users\User\RiderProjects\TicketSalesAPI\UserService\bin\Debug\net8.0\ZstdSharp.dll
 C:\Users\User\RiderProjects\TicketSalesAPI\UserService\bin\Debug\net8.0\runtimes\linux-arm64\native\alpine-librdkafka.so
 C:\Users\User\RiderProjects\TicketSalesAPI\UserService\bin\Debug\net8.0\runtimes\linux-arm64\native\librdkafka.so
 C:\Users\User\RiderProjects\TicketSalesAPI\UserService\bin\Debug\net8.0\runtimes\linux-x64\native\alpine-librdkafka.so
