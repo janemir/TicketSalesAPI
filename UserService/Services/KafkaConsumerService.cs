@@ -60,7 +60,7 @@ public class KafkaConsumerService : BackgroundService
                             var response = new
                             {
                                 ObjectId = objectId,
-                                ConfirmationTime = DateTime.UtcNow.ToString("o") // ISO 8601
+                                ConfirmationTime = DateTime.UtcNow.ToString("o")
                             };
                             var serializedResponse = JsonSerializer.Serialize(response);
                             await _producer.ProduceAsync("confirmation-topic", new Message<Null, string> { Value = serializedResponse }, stoppingToken);

@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using UserService.Models;
 using UserService.Models.Dto;
 using UserService.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace UserService.Controllers;
 
@@ -32,6 +33,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize]
     public async Task<ActionResult<User>> CreateUser(CreateUserDto dto)
     {
         var newUser = new User
@@ -44,6 +46,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize]
     public async Task<IActionResult> UpdateUser(string id, CreateUserDto dto)
     {
         var user = await _userService.GetAsync(id);
@@ -54,11 +57,12 @@ public class UsersController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize]
     public async Task<IActionResult> DeleteUser(string id)
     {
         var user = await _userService.GetAsync(id);
         if (user == null) return NotFound();
         await _userService.RemoveAsync(id);
-        return NoContent();
+        return Ok(user);
     }
 }
