@@ -5,6 +5,7 @@ using TicketSalesAPI.Models;
 using TicketSalesAPI.Models.Dto;
 using TicketSalesAPI.Services;
 using Prometheus;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TicketSalesAPI.Controllers;
 
@@ -215,6 +216,7 @@ public class EventsController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize]
     public async Task<ActionResult<Event>> CreateEvent(CreateEventDto dto)
     {
         if (dto.AvailableTickets > new Event { HallType = dto.HallType }.TotalTickets)
@@ -249,6 +251,7 @@ public class EventsController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize]
     public async Task<IActionResult> UpdateEvent(string id, CreateEventDto dto)
     {
         var ev = await _eventsService.GetAsync(id);
@@ -273,6 +276,7 @@ public class EventsController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize]
     public async Task<IActionResult> DeleteEvent(string id)
     {
         var ev = await _eventsService.GetAsync(id);
