@@ -18,9 +18,65 @@ services:
       - EventStoreDatabase__DatabaseName=TicketSalesDB
       - EventStoreDatabase__EventsCollectionName=Events
       - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8080
+      - Jwt__Issuer=TicketSales.Auth
+      - Jwt__Audience=TicketSales.Api
+      - Jwt__Key=CHANGE_ME_SUPER_SECRET_KEY_32_CHARS_MIN
+      - Redis__Configuration=redis:6379
       - GF_SECURITY_ADMIN_PASSWORD=admin
     depends_on:
       - mongodb
+      - redis
+      - kafka
+    restart: unless-stopped
+
+  user-service:
+    build: ./UserService
+    container_name: user-service
+    ports:
+      - "8082:8080"
+    environment:
+      - UserDatabase__ConnectionString=mongodb://mongodb:27017
+      - UserDatabase__DatabaseName=TicketSalesDB
+      - UserDatabase__UsersCollectionName=Users
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8080
+      - Jwt__Issuer=TicketSales.Auth
+      - Jwt__Audience=TicketSales.Api
+      - Jwt__Key=CHANGE_ME_SUPER_SECRET_KEY_32_CHARS_MIN
+    depends_on:
+      - mongodb
+      - kafka
+    restart: unless-stopped
+
+  auth-service:
+    build: ./AuthService
+    container_name: auth-service
+    ports:
+      - "8083:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8080
+      - Jwt__Issuer=TicketSales.Auth
+      - Jwt__Audience=TicketSales.Api
+      - Jwt__Key=CHANGE_ME_SUPER_SECRET_KEY_32_CHARS_MIN
+    restart: unless-stopped
+
+  api-gateway:
+    build: ./ApiGateway
+    container_name: api-gateway
+    ports:
+      - "7000:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8080
+      - Jwt__Issuer=TicketSales.Auth
+      - Jwt__Audience=TicketSales.Api
+      - Jwt__Key=CHANGE_ME_SUPER_SECRET_KEY_32_CHARS_MIN
+    depends_on:
+      - service-db
+      - user-service
+      - auth-service
     restart: unless-stopped
 
   service-nodb:
@@ -42,6 +98,9 @@ services:
     depends_on:
       - service-db
       - service-nodb
+      - user-service
+      - api-gateway
+      - auth-service
     restart: unless-stopped
 
   grafana:

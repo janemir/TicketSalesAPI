@@ -1,5 +1,7 @@
+using ApiGateway;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
+using Prometheus;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddJsonFile("ocelot.json", optional: false, reloadOnChange: true);
@@ -31,8 +33,11 @@ var app = builder.Build();
 
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseMiddleware<JwtMetricsMiddleware>();
 
 app.MapGet("/", () => Results.Ok(new { service = "ApiGateway" }));
+app.UseHttpMetrics();
+app.MapMetrics();
 
 await app.UseOcelot();
 

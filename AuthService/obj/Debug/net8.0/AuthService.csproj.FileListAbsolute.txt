@@ -40,3 +40,5 @@ C:\Users\User\RiderProjects\TicketSalesAPI\AuthService\obj\Debug\net8.0\refint\A
 C:\Users\User\RiderProjects\TicketSalesAPI\AuthService\obj\Debug\net8.0\AuthService.pdb
 C:\Users\User\RiderProjects\TicketSalesAPI\AuthService\obj\Debug\net8.0\AuthService.genruntimeconfig.cache
 C:\Users\User\RiderProjects\TicketSalesAPI\AuthService\obj\Debug\net8.0\ref\AuthService.dll
+C:\Users\User\RiderProjects\TicketSalesAPI\AuthService\bin\Debug\net8.0\Prometheus.NetStandard.dll
+C:\Users\User\RiderProjects\TicketSalesAPI\AuthService\bin\Debug\net8.0\Prometheus.AspNetCore.dll

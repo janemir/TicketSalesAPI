@@ -53,6 +53,10 @@
             "Ocelot": {
               "target": "Package",
               "version": "[23.3.3, )"
+            },
+            "prometheus-net.AspNetCore": {
+              "target": "Package",
+              "version": "[8.2.1, )"
             }
           },
           "imports": [

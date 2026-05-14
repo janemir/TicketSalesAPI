@@ -72,3 +72,5 @@ C:\Users\User\RiderProjects\TicketSalesAPI\UserService\bin\Debug\net8.0\Microsof
 C:\Users\User\RiderProjects\TicketSalesAPI\UserService\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
 C:\Users\User\RiderProjects\TicketSalesAPI\UserService\bin\Debug\net8.0\Microsoft.IdentityModel.Tokens.dll
 C:\Users\User\RiderProjects\TicketSalesAPI\UserService\bin\Debug\net8.0\System.IdentityModel.Tokens.Jwt.dll
+C:\Users\User\RiderProjects\TicketSalesAPI\UserService\bin\Debug\net8.0\Prometheus.NetStandard.dll
+C:\Users\User\RiderProjects\TicketSalesAPI\UserService\bin\Debug\net8.0\Prometheus.AspNetCore.dll

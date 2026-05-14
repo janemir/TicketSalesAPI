@@ -1,0 +1,8 @@
+C:\Users\User\RiderProjects\TicketSalesAPI\Lab6.Tests\bin\Debug\net8.0\CoverletSourceRootsMapping_Lab6.Tests
+C:\Users\User\RiderProjects\TicketSalesAPI\Lab6.Tests\obj\Debug\net8.0\Lab6.Tests.csproj.AssemblyReference.cache
+C:\Users\User\RiderProjects\TicketSalesAPI\Lab6.Tests\obj\Debug\net8.0\MvcTestingAppManifest.json
+C:\Users\User\RiderProjects\TicketSalesAPI\Lab6.Tests\obj\Debug\net8.0\Lab6.Tests.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\User\RiderProjects\TicketSalesAPI\Lab6.Tests\obj\Debug\net8.0\Lab6.Tests.AssemblyInfoInputs.cache
+C:\Users\User\RiderProjects\TicketSalesAPI\Lab6.Tests\obj\Debug\net8.0\Lab6.Tests.AssemblyInfo.cs
+C:\Users\User\RiderProjects\TicketSalesAPI\Lab6.Tests\obj\Debug\net8.0\Lab6.Tests.csproj.CoreCompileInputs.cache
+C:\Users\User\RiderProjects\TicketSalesAPI\Lab6.Tests\obj\Debug\net8.0\Lab6.Tests.sourcelink.json
