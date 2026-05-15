@@ -1,13 +1,35 @@
 {
   "Routes": [
     {
+      "DownstreamPathTemplate": "/api/auth/login",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "auth-service", "Port": 8080 }
+      ],
+      "UpstreamPathTemplate": "/auth/login",
+      "UpstreamHttpMethod": [ "POST" ],
+      "Priority": 1
+    },
+    {
       "DownstreamPathTemplate": "/api/events",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         { "Host": "service-db", "Port": 8080 }
       ],
       "UpstreamPathTemplate": "/ticketsales/events",
-      "UpstreamHttpMethod": [ "GET", "POST" ]
+      "UpstreamHttpMethod": [ "GET" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/events",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "service-db", "Port": 8080 }
+      ],
+      "UpstreamPathTemplate": "/ticketsales/events",
+      "UpstreamHttpMethod": [ "POST" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
     },
     {
       "DownstreamPathTemplate": "/api/events/{id}",
@@ -35,17 +57,7 @@
       ],
       "UpstreamPathTemplate": "/users/{id}",
       "UpstreamHttpMethod": [ "GET", "PUT", "DELETE" ]
-    },
-    {
-      "DownstreamPathTemplate": "/api/auth/login",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        { "Host": "auth-service", "Port": 8080 }
-      ],
-      "UpstreamPathTemplate": "/auth/login",
-      "UpstreamHttpMethod": [ "POST" ]
     }
   ],
-  "GlobalConfiguration": { }
+  "GlobalConfiguration": {}
 }
-

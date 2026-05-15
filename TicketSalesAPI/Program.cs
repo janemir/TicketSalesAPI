@@ -82,9 +82,6 @@ builder.Services.AddStackExchangeRedisCache(options =>
     options.InstanceName = "TicketCache";
 });
 
-builder.Services.AddSingleton<KafkaProducerService>();
-builder.Services.AddHostedService<ConfirmationConsumerService>();
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

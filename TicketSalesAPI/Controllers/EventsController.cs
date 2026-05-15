@@ -16,7 +16,6 @@ public class EventsController : ControllerBase
 
     private readonly EventsService _eventsService;
     private readonly IDistributedCache _cache;
-    private readonly KafkaProducerService _kafkaProducer;
     private readonly ILogger<EventsController> _logger;
 
     private static readonly Counter EventsCreatedCounter = Metrics.CreateCounter(
@@ -50,12 +49,10 @@ public class EventsController : ControllerBase
     public EventsController(
         EventsService eventsService,
         IDistributedCache cache,
-        KafkaProducerService kafkaProducer,
         ILogger<EventsController> logger)
     {
         _eventsService = eventsService;
         _cache = cache;
-        _kafkaProducer = kafkaProducer;
         _logger = logger;
     }
 
@@ -238,12 +235,6 @@ public class EventsController : ControllerBase
 
         await _eventsService.CreateAsync(newEvent);
         EventsCreatedCounter.WithLabels("service-db").Inc();
-
-        await _kafkaProducer.ProduceAsync("object-created-topic", new
-        {
-            ObjectId = newEvent.Id,
-            UserId = dto.UserId
-        });
 
         await InvalidateCache();
 

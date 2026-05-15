@@ -50,9 +50,17 @@
               "target": "Package",
               "version": "[8.0.10, )"
             },
+            "Microsoft.AspNetCore.OpenApi": {
+              "target": "Package",
+              "version": "[11.0.0-preview.4.26230.115, )"
+            },
             "Ocelot": {
               "target": "Package",
               "version": "[23.3.3, )"
+            },
+            "Swashbuckle.AspNetCore": {
+              "target": "Package",
+              "version": "[10.1.7, )"
             },
             "prometheus-net.AspNetCore": {
               "target": "Package",

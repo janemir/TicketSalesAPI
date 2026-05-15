@@ -1,0 +1,38 @@
+### 1. Получение JWT-токена
+POST http://localhost:7000/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "admin123"
+}
+
+### 2. Получение всех мероприятий через API Gateway
+GET http://localhost:7000/ticketsales/events
+
+### 3. Создание мероприятия через API Gateway с корректным токеном
+POST http://localhost:7000/ticketsales/events
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbiIsInVuaXF1ZV9uYW1lIjoiYWRtaW4iLCJqdGkiOiJiNjgyMDQ1NTlmOWQ0NGJmOGE0MTQxNWNjZTIyYTcxNSIsIm5iZiI6MTc3ODg2MDQxNCwiZXhwIjoxNzc4ODYxMzE0LCJpc3MiOiJUaWNrZXRTYWxlcy5BdXRoIiwiYXVkIjoiVGlja2V0U2FsZXMuQXBpIn0.3pFkto94kgeLvdppXC_0OZW91dQBXwHi-8f1DFSTrts
+
+{
+  "name": "Концерт",
+  "date": "2026-12-31T19:00:00Z",
+  "hallType": 2,
+  "availableTickets": 10,
+  "price": 2500,
+  "userId": "test123"
+}
+
+### 4. Создание мероприятия без токена
+POST http://localhost:7000/ticketsales/events
+Content-Type: application/json
+
+{
+  "name": "Неавторизованная попытка",
+  "date": "2026-12-31T19:00:00Z",
+  "hallType": 0,
+  "availableTickets": 14,
+  "price": 2500,
+  "userId": "test123"
+}
