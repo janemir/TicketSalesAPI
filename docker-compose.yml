@@ -97,7 +97,6 @@ services:
       - service-db
       - service-nodb
       - user-service
-      - api-gateway
       - auth-service
     restart: unless-stopped
 

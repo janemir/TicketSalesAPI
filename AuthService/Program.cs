@@ -1,5 +1,3 @@
-using Prometheus;
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -25,8 +23,6 @@ if (app.Configuration.GetValue("HttpsRedirection:Enabled", false))
 }
 
 app.MapControllers();
-app.UseHttpMetrics();
-app.MapMetrics();
 app.Run();
 
 public partial class Program { }
