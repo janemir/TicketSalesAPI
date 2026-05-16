@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using UserService.Models;
 using UserService.Models.Dto;
 using UserService.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -18,42 +17,42 @@ public class UsersController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<User>>> GetUsers()
+    public async Task<ActionResult<IEnumerable<UserResponseDto>>> GetUsers()
     {
         var users = await _userService.GetAsync();
-        return Ok(users);
+        return Ok(users.Select(UserResponseDto.FromUser));
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<User>> GetUser(string id)
+    public async Task<ActionResult<UserResponseDto>> GetUser(string id)
     {
         var user = await _userService.GetAsync(id);
         if (user == null) return NotFound();
-        return Ok(user);
+        return Ok(UserResponseDto.FromUser(user));
     }
 
     [HttpPost]
-    [Authorize]
-    public async Task<ActionResult<User>> CreateUser(CreateUserDto dto)
+    [AllowAnonymous]
+    public async Task<ActionResult<UserResponseDto>> CreateUser(CreateUserDto dto)
     {
-        var newUser = new User
-        {
-            Name = dto.Name,
-            RegisteredObjects = 0
-        };
-        await _userService.CreateAsync(newUser);
-        return CreatedAtAction(nameof(GetUser), new { id = newUser.Id }, newUser);
+        if (await _userService.GetByNameAsync(dto.Name) != null)
+            return Conflict(new { message = "Пользователь с таким именем уже существует" });
+
+        var newUser = await _userService.CreateWithPasswordAsync(dto.Name, dto.Password);
+        return CreatedAtAction(nameof(GetUser), new { id = newUser.Id }, UserResponseDto.FromUser(newUser));
     }
 
     [HttpPut("{id}")]
     [Authorize]
-    public async Task<IActionResult> UpdateUser(string id, CreateUserDto dto)
+    public async Task<IActionResult> UpdateUser(string id, UpdateUserDto dto)
     {
-        var user = await _userService.GetAsync(id);
-        if (user == null) return NotFound();
-        user.Name = dto.Name;
-        await _userService.UpdateAsync(id, user);
-        return Ok(user);
+        if (await _userService.GetAsync(id) == null) return NotFound();
+
+        if (await _userService.GetByNameAsync(dto.Name) is { } existing && existing.Id != id)
+            return Conflict(new { message = "Пользователь с таким именем уже существует" });
+
+        var updated = await _userService.UpdateProfileAsync(id, dto.Name, dto.Password);
+        return Ok(UserResponseDto.FromUser(updated!));
     }
 
     [HttpDelete("{id}")]
@@ -63,6 +62,6 @@ public class UsersController : ControllerBase
         var user = await _userService.GetAsync(id);
         if (user == null) return NotFound();
         await _userService.RemoveAsync(id);
-        return Ok(user);
+        return Ok(UserResponseDto.FromUser(user));
     }
 }

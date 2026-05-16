@@ -10,6 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.Configure<UserDatabaseSettings>(
     builder.Configuration.GetSection("UserDatabase"));
+builder.Services.AddSingleton<PasswordHashingService>();
 builder.Services.AddSingleton<UserService.Services.UserService>();
 
 // Add services to the container.
