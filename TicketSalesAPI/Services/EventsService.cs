@@ -4,7 +4,7 @@ using TicketSalesAPI.Models;
 
 namespace TicketSalesAPI.Services;
 
-public class EventsService
+public class EventsService : IEventsService
 {
     private readonly IMongoCollection<Event> _eventsCollection;
 

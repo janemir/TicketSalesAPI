@@ -1,16 +1,29 @@
+using AuthService.Services;
+using Microsoft.OpenApi.Models;
+using Prometheus;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddControllers();
-builder.Services.Configure<AuthService.Services.JwtOptions>(builder.Configuration.GetSection("Jwt"));
-builder.Services.AddSingleton<AuthService.Services.JwtTokenService>();
+builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("Jwt"));
+builder.Services.AddSingleton<JwtTokenService>();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "AuthService", Version = "v1" });
+});
+
+builder.Services.AddHttpClient("UserService")
+    .ConfigureHttpClient((sp, client) =>
+    {
+        var configuration = sp.GetRequiredService<IConfiguration>();
+        var userServiceBaseUrl = configuration.GetValue<string>("UserService:BaseUrl")
+            ?? "http://localhost:8082";
+        client.BaseAddress = new Uri(userServiceBaseUrl.TrimEnd('/') + "/");
+    });
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -23,6 +36,7 @@ if (app.Configuration.GetValue("HttpsRedirection:Enabled", false))
 }
 
 app.MapControllers();
-app.Run();
+app.UseHttpMetrics();
+app.MapMetrics();
 
-public partial class Program { }
+app.Run();

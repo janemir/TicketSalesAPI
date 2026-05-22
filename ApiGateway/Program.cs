@@ -32,8 +32,6 @@ var app = builder.Build();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapGet("/", () => Results.Ok(new { service = "ApiGateway" }));
-
 await app.UseOcelot();
 
 app.Run();

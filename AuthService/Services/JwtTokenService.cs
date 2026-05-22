@@ -25,7 +25,7 @@ public sealed class JwtTokenService
         };
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_options.Key));
-        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256); // подпись
 
         var token = new JwtSecurityToken(
             issuer: _options.Issuer,

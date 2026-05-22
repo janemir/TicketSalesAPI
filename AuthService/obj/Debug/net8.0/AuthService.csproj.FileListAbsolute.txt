@@ -42,3 +42,10 @@ C:\Users\User\RiderProjects\TicketSalesAPI\AuthService\obj\Debug\net8.0\AuthServ
 C:\Users\User\RiderProjects\TicketSalesAPI\AuthService\obj\Debug\net8.0\ref\AuthService.dll
 C:\Users\User\RiderProjects\TicketSalesAPI\AuthService\bin\Debug\net8.0\Prometheus.NetStandard.dll
 C:\Users\User\RiderProjects\TicketSalesAPI\AuthService\bin\Debug\net8.0\Prometheus.AspNetCore.dll
+c:\Users\User\RiderProjects\TicketSalesAPI\.build-out\appsettings.Development.json
+c:\Users\User\RiderProjects\TicketSalesAPI\.build-out\appsettings.json
+c:\Users\User\RiderProjects\TicketSalesAPI\.build-out\AuthService.exe
+c:\Users\User\RiderProjects\TicketSalesAPI\.build-out\AuthService.deps.json
+c:\Users\User\RiderProjects\TicketSalesAPI\.build-out\AuthService.runtimeconfig.json
+c:\Users\User\RiderProjects\TicketSalesAPI\.build-out\AuthService.dll
+c:\Users\User\RiderProjects\TicketSalesAPI\.build-out\AuthService.pdb

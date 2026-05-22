@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\User\\RiderProjects\\TicketSalesAPI\\ApiGateway\\ApiGateway.csproj": {}
+    "c:\\Users\\User\\RiderProjects\\TicketSalesAPI\\ApiGateway\\ApiGateway.csproj": {}
   },
   "projects": {
-    "C:\\Users\\User\\RiderProjects\\TicketSalesAPI\\ApiGateway\\ApiGateway.csproj": {
+    "c:\\Users\\User\\RiderProjects\\TicketSalesAPI\\ApiGateway\\ApiGateway.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\User\\RiderProjects\\TicketSalesAPI\\ApiGateway\\ApiGateway.csproj",
+        "projectUniqueName": "c:\\Users\\User\\RiderProjects\\TicketSalesAPI\\ApiGateway\\ApiGateway.csproj",
         "projectName": "ApiGateway",
-        "projectPath": "C:\\Users\\User\\RiderProjects\\TicketSalesAPI\\ApiGateway\\ApiGateway.csproj",
+        "projectPath": "c:\\Users\\User\\RiderProjects\\TicketSalesAPI\\ApiGateway\\ApiGateway.csproj",
         "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\User\\RiderProjects\\TicketSalesAPI\\ApiGateway\\obj\\",
+        "outputPath": "c:\\Users\\User\\RiderProjects\\TicketSalesAPI\\ApiGateway\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config",

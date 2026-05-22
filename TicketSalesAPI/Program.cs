@@ -14,6 +14,10 @@ builder.Services.Configure<EventStoreDBSettings>(
     builder.Configuration.GetSection("EventStoreDatabase"));
 
 builder.Services.AddSingleton<EventsService>();
+builder.Services.AddSingleton<IEventsService>(sp => sp.GetRequiredService<EventsService>());
+builder.Services.AddSingleton<KafkaProducerService>();
+builder.Services.AddSingleton<IKafkaEventPublisher>(sp => sp.GetRequiredService<KafkaProducerService>());
+builder.Services.AddHostedService<ConfirmationConsumerService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -106,5 +110,3 @@ app.UseHttpMetrics();
 app.MapMetrics();
 
 app.Run();
-
-public partial class Program { }

@@ -23,10 +23,12 @@ services:
       - Jwt__Audience=TicketSales.Api
       - Jwt__Key=CHANGE_ME_SUPER_SECRET_KEY_32_CHARS_MIN
       - Redis__Configuration=redis:6379
+      - Kafka__BootstrapServers=kafka:9092
       - GF_SECURITY_ADMIN_PASSWORD=admin
     depends_on:
       - mongodb
       - redis
+      - kafka
     restart: unless-stopped
 
   user-service:
@@ -43,8 +45,10 @@ services:
       - Jwt__Issuer=TicketSales.Auth
       - Jwt__Audience=TicketSales.Api
       - Jwt__Key=CHANGE_ME_SUPER_SECRET_KEY_32_CHARS_MIN
+      - Kafka__BootstrapServers=kafka:9092
     depends_on:
       - mongodb
+      - kafka
     restart: unless-stopped
 
   auth-service:
@@ -53,11 +57,14 @@ services:
     ports:
       - "8083:8080"
     environment:
+      - UserService__BaseUrl=http://user-service:8080
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:8080
       - Jwt__Issuer=TicketSales.Auth
       - Jwt__Audience=TicketSales.Api
       - Jwt__Key=CHANGE_ME_SUPER_SECRET_KEY_32_CHARS_MIN
+    depends_on:
+      - user-service
     restart: unless-stopped
 
   api-gateway:
@@ -98,6 +105,7 @@ services:
       - service-nodb
       - user-service
       - auth-service
+      - kafka
     restart: unless-stopped
 
   grafana:
@@ -105,6 +113,8 @@ services:
     container_name: grafana
     ports:
       - "3000:3000"
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning
     depends_on:
       - prometheus
     restart: unless-stopped
@@ -114,6 +124,38 @@ services:
     container_name: redis
     ports:
       - "6379:6379"
+    restart: unless-stopped
+
+  zookeeper:
+    image: wurstmeister/zookeeper:latest
+    container_name: zookeeper
+    ports:
+      - "2181:2181"
+    restart: unless-stopped
+
+  kafka:
+    image: wurstmeister/kafka:latest
+    container_name: kafka
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_HOST_NAME: kafka
+      KAFKA_CREATE_TOPICS: "object-created-topic:1:1,confirmation-topic:1:1"
+    ports:
+      - "9092:9092"
+    restart: unless-stopped
+
+  kafdrop:
+    image: obsidiandynamics/kafdrop:latest
+    container_name: kafdrop
+    depends_on:
+      - kafka
+    environment:
+      KAFKA_BROKERCONNECT: kafka:9092
+      JVM_OPTS: "-Xms32M -Xmx64M"
+    ports:
+      - "9000:9000"
     restart: unless-stopped
 
 volumes:

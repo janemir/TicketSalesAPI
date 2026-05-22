@@ -13,8 +13,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthService", "AuthService\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiGateway", "ApiGateway\ApiGateway.csproj", "{809B0AE7-C7DA-4EA5-8204-9135CF63FC94}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lab6.Tests", "Lab6.Tests\Lab6.Tests.csproj", "{AA3C5F26-8325-4106-93B1-127B468189E1}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -44,9 +42,5 @@ Global
 		{809B0AE7-C7DA-4EA5-8204-9135CF63FC94}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{809B0AE7-C7DA-4EA5-8204-9135CF63FC94}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{809B0AE7-C7DA-4EA5-8204-9135CF63FC94}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AA3C5F26-8325-4106-93B1-127B468189E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AA3C5F26-8325-4106-93B1-127B468189E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AA3C5F26-8325-4106-93B1-127B468189E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AA3C5F26-8325-4106-93B1-127B468189E1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

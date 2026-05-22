@@ -3,8 +3,8 @@ POST http://localhost:7000/auth/login
 Content-Type: application/json
 
 {
-  "username": "admin",
-  "password": "admin123"
+  "username": "Роза Барбоскина",
+  "password": "Barbos16"
 }
 
 ### 2. Получение всех мероприятий через API Gateway
@@ -13,7 +13,7 @@ GET http://localhost:7000/ticketsales/events
 ### 3. Создание мероприятия через API Gateway с корректным токеном
 POST http://localhost:7000/ticketsales/events
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbiIsInVuaXF1ZV9uYW1lIjoiYWRtaW4iLCJqdGkiOiIxY2Y3NjEzNDJjNGM0NTc2OWQ3MTljMjg4NWU3NGVjYSIsIm5iZiI6MTc3ODg3NzI4OCwiZXhwIjoxNzc4ODc4MTg4LCJpc3MiOiJUaWNrZXRTYWxlcy5BdXRoIiwiYXVkIjoiVGlja2V0U2FsZXMuQXBpIn0.T2c_9LgiBtj0xbzwKWpN6k3iaZblCxNxU9N9dl4d2xA
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2YTBmNGMyNmJhNzVmOWI4OTcxYWQ2ZTIiLCJ1bmlxdWVfbmFtZSI6ItCg0L7Qt9CwINCR0LDRgNCx0L7RgdC60LjQvdCwIiwianRpIjoiNTc5MWRjOGY2YzE2NDAyZmExMjU3YjdjNmY1NjE0Y2UiLCJuYmYiOjE3NzkzODc4NTcsImV4cCI6MTc3OTM4ODc1NywiaXNzIjoiVGlja2V0U2FsZXMuQXV0aCIsImF1ZCI6IlRpY2tldFNhbGVzLkFwaSJ9.exGC9XWpLkvGUYaVlHBGy6XHQknQk_4clyH5oe5MteE
 
 {
   "name": "Концерт",

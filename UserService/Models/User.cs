@@ -10,7 +10,6 @@ public class User
     [BsonRepresentation(BsonType.ObjectId)]
     public string? Id { get; set; }
 
-    /// <summary>Имя пользователя (логин для аутентификации).</summary>
     [BsonElement("Name")]
     public string Name { get; set; } = string.Empty;
 

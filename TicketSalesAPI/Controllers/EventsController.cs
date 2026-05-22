@@ -6,6 +6,7 @@ using TicketSalesAPI.Models.Dto;
 using TicketSalesAPI.Services;
 using Prometheus;
 using Microsoft.AspNetCore.Authorization;
+using TicketSalesAPI.Security;
 
 namespace TicketSalesAPI.Controllers;
 
@@ -14,8 +15,9 @@ namespace TicketSalesAPI.Controllers;
 public class EventsController : ControllerBase
 {
 
-    private readonly EventsService _eventsService;
+    private readonly IEventsService _eventsService;
     private readonly IDistributedCache _cache;
+    private readonly IKafkaEventPublisher _kafkaProducer;
     private readonly ILogger<EventsController> _logger;
 
     private static readonly Counter EventsCreatedCounter = Metrics.CreateCounter(
@@ -47,12 +49,14 @@ public class EventsController : ControllerBase
         });
 
     public EventsController(
-        EventsService eventsService,
+        IEventsService eventsService,
         IDistributedCache cache,
+        IKafkaEventPublisher kafkaProducer,
         ILogger<EventsController> logger)
     {
         _eventsService = eventsService;
         _cache = cache;
+        _kafkaProducer = kafkaProducer;
         _logger = logger;
     }
 
@@ -216,6 +220,11 @@ public class EventsController : ControllerBase
     [Authorize]
     public async Task<ActionResult<Event>> CreateEvent(CreateEventDto dto)
     {
+        var currentUserId = CurrentUser.GetUserId(User);
+        if (currentUserId == null) return Unauthorized();
+        if (!string.Equals(dto.UserId, currentUserId, StringComparison.Ordinal))
+            return Forbid();
+
         if (dto.AvailableTickets > new Event { HallType = dto.HallType }.TotalTickets)
         {
             EventsValidationErrorsCounter.WithLabels("service-db").Inc();
@@ -236,6 +245,12 @@ public class EventsController : ControllerBase
         await _eventsService.CreateAsync(newEvent);
         EventsCreatedCounter.WithLabels("service-db").Inc();
 
+        await _kafkaProducer.ProduceAsync("object-created-topic", new
+        {
+            ObjectId = newEvent.Id,
+            UserId = dto.UserId
+        });
+
         await InvalidateCache();
 
         return CreatedAtAction(nameof(GetEvent), new { id = newEvent.Id }, newEvent);
@@ -245,8 +260,13 @@ public class EventsController : ControllerBase
     [Authorize]
     public async Task<IActionResult> UpdateEvent(string id, CreateEventDto dto)
     {
+        var currentUserId = CurrentUser.GetUserId(User);
+        if (currentUserId == null) return Unauthorized();
+
         var ev = await _eventsService.GetAsync(id);
         if (ev == null) return NotFound();
+        if (!string.Equals(ev.UserId, currentUserId, StringComparison.Ordinal))
+            return Forbid();
 
         if (dto.AvailableTickets > new Event { HallType = dto.HallType }.TotalTickets)
         {
@@ -259,6 +279,7 @@ public class EventsController : ControllerBase
         ev.HallType = dto.HallType;
         ev.AvailableTickets = dto.AvailableTickets;
         ev.Price = dto.Price;
+        ev.UserId = currentUserId;
 
         await _eventsService.UpdateAsync(id, ev);
         await InvalidateCache(id);
@@ -270,8 +291,13 @@ public class EventsController : ControllerBase
     [Authorize]
     public async Task<IActionResult> DeleteEvent(string id)
     {
+        var currentUserId = CurrentUser.GetUserId(User);
+        if (currentUserId == null) return Unauthorized();
+
         var ev = await _eventsService.GetAsync(id);
         if (ev == null) return NotFound();
+        if (!string.Equals(ev.UserId, currentUserId, StringComparison.Ordinal))
+            return Forbid();
 
         await _eventsService.RemoveAsync(id);
         await InvalidateCache(id);

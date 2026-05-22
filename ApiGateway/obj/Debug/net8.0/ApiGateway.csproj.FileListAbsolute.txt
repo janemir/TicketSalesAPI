@@ -49,3 +49,5 @@ C:\Users\User\RiderProjects\TicketSalesAPI\ApiGateway\obj\Debug\net8.0\refint\Ap
 C:\Users\User\RiderProjects\TicketSalesAPI\ApiGateway\obj\Debug\net8.0\ApiGateway.pdb
 C:\Users\User\RiderProjects\TicketSalesAPI\ApiGateway\obj\Debug\net8.0\ApiGateway.genruntimeconfig.cache
 C:\Users\User\RiderProjects\TicketSalesAPI\ApiGateway\obj\Debug\net8.0\ref\ApiGateway.dll
+C:\Users\User\RiderProjects\TicketSalesAPI\ApiGateway\bin\Debug\net8.0\Prometheus.NetStandard.dll
+C:\Users\User\RiderProjects\TicketSalesAPI\ApiGateway\bin\Debug\net8.0\Prometheus.AspNetCore.dll

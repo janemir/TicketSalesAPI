@@ -1,0 +1,54 @@
+{
+  "annotations": { "list": [] },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
+  "panels": [
+    {
+      "title": "AuthService: успешные логины",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 0 },
+      "targets": [
+        {
+          "expr": "sum(rate(auth_login_attempts_total{result=\"success\"}[1m]))",
+          "legendFormat": "success"
+        }
+      ]
+    },
+    {
+      "title": "AuthService: неуспешные логины",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 0 },
+      "targets": [
+        {
+          "expr": "sum(rate(auth_login_attempts_total{result=\"invalid_credentials\"}[1m]))",
+          "legendFormat": "неверный пароль"
+        },
+        {
+          "expr": "sum(rate(auth_login_attempts_total{result=\"user_service_unavailable\"}[1m]))",
+          "legendFormat": "UserService недоступен"
+        }
+      ]
+    },
+    {
+      "title": "Выданные JWT (AuthService)",
+      "type": "stat",
+      "gridPos": { "h": 4, "w": 8, "x": 0, "y": 8 },
+      "targets": [
+        {
+          "expr": "sum(auth_tokens_issued_total)",
+          "legendFormat": "tokens"
+        }
+      ]
+    }
+  ],
+  "refresh": "5s",
+  "schemaVersion": 39,
+  "tags": ["lab6", "auth"],
+  "time": { "from": "now-15m", "to": "now" },
+  "title": "Lab6 — AuthService",
+  "uid": "lab6-auth-gateway",
+  "version": 1
+}
