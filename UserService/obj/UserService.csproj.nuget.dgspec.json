@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "c:\\Users\\User\\RiderProjects\\TicketSalesAPI\\UserService\\UserService.csproj": {}
+    "C:\\Users\\User\\RiderProjects\\TicketSalesAPI\\UserService\\UserService.csproj": {}
   },
   "projects": {
-    "c:\\Users\\User\\RiderProjects\\TicketSalesAPI\\UserService\\UserService.csproj": {
+    "C:\\Users\\User\\RiderProjects\\TicketSalesAPI\\UserService\\UserService.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\User\\RiderProjects\\TicketSalesAPI\\UserService\\UserService.csproj",
+        "projectUniqueName": "C:\\Users\\User\\RiderProjects\\TicketSalesAPI\\UserService\\UserService.csproj",
         "projectName": "UserService",
-        "projectPath": "c:\\Users\\User\\RiderProjects\\TicketSalesAPI\\UserService\\UserService.csproj",
+        "projectPath": "C:\\Users\\User\\RiderProjects\\TicketSalesAPI\\UserService\\UserService.csproj",
         "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\User\\RiderProjects\\TicketSalesAPI\\UserService\\obj\\",
+        "outputPath": "C:\\Users\\User\\RiderProjects\\TicketSalesAPI\\UserService\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -49,6 +49,14 @@
             "Confluent.Kafka": {
               "target": "Package",
               "version": "[2.6.1, )"
+            },
+            "HotChocolate.AspNetCore": {
+              "target": "Package",
+              "version": "[16.6.7, )"
+            },
+            "HotChocolate.Data.MongoDB": {
+              "target": "Package",
+              "version": "[16.6.7, )"
             },
             "Microsoft.AspNetCore.Authentication.JwtBearer": {
               "target": "Package",
