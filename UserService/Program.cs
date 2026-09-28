@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
 using Prometheus;
+using UserService.GraphQL;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -84,6 +85,7 @@ if (app.Configuration.GetValue("HttpsRedirection:Enabled", false))
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+app.MapGraphQL();
 app.UseHttpMetrics();
 app.MapMetrics();
 app.Run();
