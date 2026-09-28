@@ -68,6 +68,13 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 builder.Services.AddAuthorization();
+builder.Services
+    .AddGraphQLServer()
+    .AddQueryType<Query>()
+    .AddMutationType<Mutation>()
+    .AddMongoDbFiltering()
+    .AddMongoDbSorting()
+    .AddAuthorization();
 
 var app = builder.Build();
 

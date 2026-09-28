@@ -199,6 +199,25 @@
           "build/HotChocolate.AspNetCore.targets": {}
         }
       },
+      "HotChocolate.AspNetCore.Authorization/16.6.7": {
+        "type": "package",
+        "dependencies": {
+          "HotChocolate": "16.6.7"
+        },
+        "compile": {
+          "lib/net8.0/HotChocolate.AspNetCore.Authorization.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/HotChocolate.AspNetCore.Authorization.dll": {
+            "related": ".xml"
+          }
+        },
+        "frameworkReferences": [
+          "Microsoft.AspNetCore.App"
+        ]
+      },
       "HotChocolate.AspNetCore.Pipeline/16.6.7": {
         "type": "package",
         "dependencies": {
@@ -2006,6 +2025,27 @@
         "lib/net8.0/HotChocolate.AspNetCore.xml",
         "lib/net9.0/HotChocolate.AspNetCore.dll",
         "lib/net9.0/HotChocolate.AspNetCore.xml"
+      ]
+    },
+    "HotChocolate.AspNetCore.Authorization/16.6.7": {
+      "sha512": "xRqac9zAvyNcJA8R0PkwfgbrNwuYxPYZjkcAvq7FGzM0kS9AYfcDe11Sj/u+Nmz312xi/IW+/IVr98mx1MVQ/A==",
+      "type": "package",
+      "path": "hotchocolate.aspnetcore.authorization/16.6.7",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE",
+        "hotchocolate-icon.png",
+        "hotchocolate.aspnetcore.authorization.16.6.7.nupkg.sha512",
+        "hotchocolate.aspnetcore.authorization.nuspec",
+        "lib/net10.0/HotChocolate.AspNetCore.Authorization.dll",
+        "lib/net10.0/HotChocolate.AspNetCore.Authorization.xml",
+        "lib/net11.0/HotChocolate.AspNetCore.Authorization.dll",
+        "lib/net11.0/HotChocolate.AspNetCore.Authorization.xml",
+        "lib/net8.0/HotChocolate.AspNetCore.Authorization.dll",
+        "lib/net8.0/HotChocolate.AspNetCore.Authorization.xml",
+        "lib/net9.0/HotChocolate.AspNetCore.Authorization.dll",
+        "lib/net9.0/HotChocolate.AspNetCore.Authorization.xml"
       ]
     },
     "HotChocolate.AspNetCore.Pipeline/16.6.7": {
@@ -4341,6 +4381,7 @@
     "net8.0": [
       "Confluent.Kafka >= 2.6.1",
       "HotChocolate.AspNetCore >= 16.6.7",
+      "HotChocolate.AspNetCore.Authorization >= 16.6.7",
       "HotChocolate.Data.MongoDB >= 16.6.7",
       "Microsoft.AspNetCore.Authentication.JwtBearer >= 8.0.10",
       "Microsoft.AspNetCore.OpenApi >= 8.0.10",
@@ -4400,6 +4441,10 @@
             "version": "[2.6.1, )"
           },
           "HotChocolate.AspNetCore": {
+            "target": "Package",
+            "version": "[16.6.7, )"
+          },
+          "HotChocolate.AspNetCore.Authorization": {
             "target": "Package",
             "version": "[16.6.7, )"
           },

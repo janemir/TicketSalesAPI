@@ -1,3 +1,4 @@
+using HotChocolate.Data;
 using UserService.Models;
 
 namespace UserService.GraphQL;
@@ -5,8 +6,8 @@ namespace UserService.GraphQL;
 public class Query
 {
 
-    [UseMongoDBFiltering]
-    [UseMongoDBSorting]
+    [UseFiltering]
+    [UseSorting]
     public async Task<List<User>> GetUsers([Service] Services.UserService userService)
         => await userService.GetAsync();
 

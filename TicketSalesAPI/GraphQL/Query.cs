@@ -1,11 +1,12 @@
+using HotChocolate.Data;
 using TicketSalesAPI.Models;
 
 namespace TicketSalesAPI.GraphQL;
 
 public class Query
 {
-    [UseMongoDBFiltering]
-    [UseMongoDBSorting]
+    [UseFiltering]
+    [UseSorting]
     public async Task<List<Event>> GetEvents([Service] Services.IEventsService eventsService)
         => await eventsService.GetAsync();
 

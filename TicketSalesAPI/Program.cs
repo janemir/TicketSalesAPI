@@ -7,6 +7,8 @@ using Microsoft.Extensions.Caching.StackExchangeRedis;
 using System.Text;
 using Microsoft.OpenApi.Models;
 using TicketSalesAPI.GraphQL;
+using HotChocolate.Data.MongoDb;
+using HotChocolate.AspNetCore.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -72,6 +74,14 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 builder.Services.AddAuthorization();
+
+builder.Services
+    .AddGraphQLServer()
+    .AddQueryType<Query>()
+    .AddMutationType<Mutation>()
+    .AddMongoDbFiltering()
+    .AddMongoDbSorting()
+    .AddAuthorization();
 
 if (!builder.Environment.IsDevelopment())
 {

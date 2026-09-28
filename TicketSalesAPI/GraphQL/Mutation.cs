@@ -1,7 +1,6 @@
 using TicketSalesAPI.Models;
 using TicketSalesAPI.Services;
 using Microsoft.Extensions.Caching.Distributed;
-using System.Text.Json;
 
 namespace TicketSalesAPI.GraphQL;
 
@@ -11,9 +10,7 @@ public class Mutation
     {
         await cache.RemoveAsync("all_events");
         if (!string.IsNullOrEmpty(eventId))
-        {
             await cache.RemoveAsync($"event_{eventId}");
-        }
     }
 
     public async Task<Event> CreateEvent(

@@ -54,6 +54,10 @@
               "target": "Package",
               "version": "[16.6.7, )"
             },
+            "HotChocolate.AspNetCore.Authorization": {
+              "target": "Package",
+              "version": "[16.6.7, )"
+            },
             "HotChocolate.Data.MongoDB": {
               "target": "Package",
               "version": "[16.6.7, )"
